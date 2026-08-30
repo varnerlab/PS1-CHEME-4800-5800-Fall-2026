@@ -6,35 +6,41 @@
 # reported, not fatal), then writes MANIFEST.txt with a SHA-256 digest of every
 # file in src/. Finish by zipping the folder as the printed instructions describe.
 
-import Dates
-using SHA
+import Dates # timestamp written to the submission manifest
+using SHA    # SHA-256 digests used to identify the submitted source files
 
-results = Dict{String, Bool}();
+# Run both public test suites and retain their completion status -
+results = Dict{String, Bool}(); # test filename => whether the suite completed without an uncaught exception
 for part ∈ ["testme_part_1.jl", "testme_part_2.jl"]
     println("\n==================== running $(part) ====================");
-    ok = true;
+    ok = true; # optimistic status, cleared if `include(...)` propagates a test failure
     try
-        include(joinpath(@__DIR__, part));
+        include(joinpath(@__DIR__, part)); # `@__DIR__` keeps execution independent of `pwd()`
     catch error
         ok = false; # the failure details were already printed by the test framework
     end
-    results[part] = ok;
+    results[part] = ok; # preserve one status for each public test suite
 end
 
-# write the manifest -
-manifest_path = joinpath(@__DIR__, "MANIFEST.txt");
+# Write the submission manifest -
+manifest_path = joinpath(@__DIR__, "MANIFEST.txt"); # generated beside this script
 open(manifest_path, "w") do io
     println(io, "PS1 CHEME 4800/5800 Fall 2026 submission manifest");
-    println(io, "generated: ", Dates.now());
+    println(io, "generated: ", Dates.now()); # local wall-clock timestamp
+
+    # Record the test outcomes -
     for part ∈ sort(collect(keys(results)))
         println(io, part, ": ", results[part] ? "all tests passed" : "some tests failed");
     end
+
+    # Fingerprint every submitted Julia source file -
     for file ∈ sort(readdir(joinpath(@__DIR__, "src"); join = true))
-        digest = bytes2hex(open(sha256, file));
+        digest = bytes2hex(open(sha256, file)); # lowercase hexadecimal SHA-256 digest
         println(io, digest, "  src/", basename(file));
     end
 end
 
+# Display the status and student packaging instructions -
 println("\n==================== submission summary ====================");
 for part ∈ sort(collect(keys(results)))
     println(part, ": ", results[part] ? "all tests passed" : "SOME TESTS FAILED (partial credit is possible; submit anyway)");

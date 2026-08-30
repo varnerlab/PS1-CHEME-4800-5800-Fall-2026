@@ -1,8 +1,8 @@
-include("Include.jl")
+include("Include.jl") # load the assignment code, data path, and Test standard library
 
 
 # ----------------------------------------------------------------------------------
-# for more information on tests, see: https://docs.julialang.org/en/v1/stdlib/Test/
+# For more information on tests, see: https://docs.julialang.org/en/v1/stdlib/Test/
 # ----------------------------------------------------------------------------------
 
 # Testset - let's write a unit test for each *public* function in our code!
@@ -10,57 +10,57 @@ include("Include.jl")
 
     @testset "decode_part_2 with test_part_2.txt" begin
 
-        # setup -
-        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_2.txt");
-        number_of_test_records = 6;
-        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv"));
+        # Setup -
+        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_2.txt"); # small public Part 2 manifest
+        number_of_test_records = 6; # expected number of physical file lines
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
 
-        # load the test file -
-        d = formulaparse(path_to_test_file);
+        # Parse the test manifest -
+        d = formulaparse(path_to_test_file); # manifest line number => formula model
         @test length(d) == number_of_test_records;
 
-        # decode the records -
-        (total, weights) = decode_part_2(d, masses);
+        # Decode the records -
+        (total, weights) = decode_part_2(d, masses); # checksum (amu), plus line number => molecular weight (amu)
 
-        # the checksum for test_part_2.txt should be 524.624 -
+        # Check the complete test-manifest checksum (amu) -
         @test isapprox(total, 524.624; atol = 1e-3)
 
-        # cobalt is one element while carbon monoxide is two: line 2 is Co, line 3 is CO -
+        # Distinguish cobalt (`Co`) on line 2 from carbon monoxide (`CO`) on line 3 -
         @test isapprox(weights[2], 58.933; atol = 1e-3)
         @test isapprox(weights[3], 28.010; atol = 1e-3)
     end
 
     @testset "decode_part_1 rejects the Part 2 grammar" begin
 
-        # setup -
-        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_2.txt");
-        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv"));
+        # Setup -
+        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_2.txt"); # contains lowercase symbol characters
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
 
-        # load the test file -
-        d = formulaparse(path_to_test_file);
+        # Parse the test manifest -
+        d = formulaparse(path_to_test_file); # manifest line number => formula model
 
-        # decode_part_1 does not understand lowercase letters, so it must throw -
+        # Check the Part 1 grammar boundary -
         @test_throws ArgumentError decode_part_1(d, masses);
     end
 
     @testset "decode_part_2 with production_part_2.txt" begin
 
-        # setup -
-        path_to_production_file = joinpath(_PATH_TO_DATA, "production_part_2.txt");
-        number_of_production_records = 150;
-        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv"));
+        # Setup -
+        path_to_production_file = joinpath(_PATH_TO_DATA, "production_part_2.txt"); # full Part 2 manifest
+        number_of_production_records = 150; # expected number of physical file lines
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
 
-        # load the production file -
-        d = formulaparse(path_to_production_file);
+        # Parse the production manifest -
+        d = formulaparse(path_to_production_file); # manifest line number => formula model
 
-        # this should be a dictionary of 150 records, with type MyChemicalFormulaModel
+        # Check the collection shape and model type -
         @test length(d) == number_of_production_records;
         @test typeof(d) == Dict{Int64, MyChemicalFormulaModel}
 
-        # decode the records -
-        (total, weights) = decode_part_2(d, masses);
+        # Decode the records -
+        (total, weights) = decode_part_2(d, masses); # checksum (amu), plus line number => molecular weight (amu)
 
-        # the checksum for production_part_2.txt should be 190707.141 -
+        # Check the complete production checksum (amu) -
         @test isapprox(total, 190707.141; atol = 1e-3)
     end
 end

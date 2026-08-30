@@ -1,5 +1,5 @@
 # ===== PRIVATE METHODS BELOW HERE =================================================================================== #
-# TODO: Put all private helper methods here. Don't forget to use the _ naming convention, and to add basic documentation.
+# TODO: Add private parsing helpers here. Prefix each helper name with `_` and document its input/output contract.
 # ===== PRIVATE METHODS ABOVE HERE =================================================================================== #
 
 # ===== PUBLIC METHODS BELOW HERE ==================================================================================== #

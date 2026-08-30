@@ -1,6 +1,6 @@
 
 # ===== PRIVATE METHODS BELOW HERE =================================================================================== #
-# TODO: Put private helper methods here. Don't forget to use the _ naming convention, and to add basic documentation.
+# TODO: Add private factory helpers here if needed. Prefix each helper name with `_` and document its contract.
 # ===== PRIVATE METHODS ABOVE HERE =================================================================================== #
 
 # ===== PUBLIC METHODS BELOW HERE ==================================================================================== #

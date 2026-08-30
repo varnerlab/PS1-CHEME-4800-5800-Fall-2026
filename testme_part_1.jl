@@ -1,8 +1,8 @@
-include("Include.jl")
+include("Include.jl") # load the assignment code, data path, and Test standard library
 
 
 # ----------------------------------------------------------------------------------
-# for more information on tests, see: https://docs.julialang.org/en/v1/stdlib/Test/
+# For more information on tests, see: https://docs.julialang.org/en/v1/stdlib/Test/
 # ----------------------------------------------------------------------------------
 
 # Testset - let's write a unit test for each *public* function in our code!
@@ -10,35 +10,35 @@ include("Include.jl")
 
     @testset "massparse with atomic-masses.csv" begin
 
-        # setup -
-        path_to_mass_file = joinpath(_PATH_TO_DATA, "atomic-masses.csv");
+        # Setup -
+        path_to_mass_file = joinpath(_PATH_TO_DATA, "atomic-masses.csv"); # portable path to the shared mass table
 
-        # load the mass table -
-        masses = massparse(path_to_mass_file);
+        # Load the mass table -
+        masses = massparse(path_to_mass_file); # element symbol => atomic mass (amu)
 
-        # the table holds 33 elements, keyed by symbol -
+        # Check the table shape and key/value types -
         @test typeof(masses) == Dict{String, Float64}
         @test length(masses) == 33
 
-        # spot-check two entries -
+        # Spot-check two atomic masses (amu) -
         @test isapprox(masses["C"], 12.011; atol = 1e-6)
         @test isapprox(masses["O"], 15.999; atol = 1e-6)
     end
 
     @testset "formulaparse with test_part_1.txt" begin
 
-        # setup -
-        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_1.txt");
-        number_of_test_records = 4;
+        # Setup -
+        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_1.txt"); # small public Part 1 manifest
+        number_of_test_records = 4; # expected number of physical file lines
 
-        # load the test file -
-        d = formulaparse(path_to_test_file);
+        # Parse the test manifest -
+        d = formulaparse(path_to_test_file); # manifest line number => formula model
 
-        # this should be a dictionary of 4 records, with type MyChemicalFormulaModel
+        # Check the collection shape and model type -
         @test length(d) == number_of_test_records;
         @test typeof(d) == Dict{Int64, MyChemicalFormulaModel}
 
-        # the first record holds the water formula -
+        # Check that file line 1 becomes the expected water model -
         @test d[1].formula == "H2O"
         @test d[1].characters == ['H', '2', 'O']
         @test d[1].len == 3
@@ -46,17 +46,17 @@ include("Include.jl")
 
     @testset "decode_part_1 with test_part_1.txt" begin
 
-        # setup -
-        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_1.txt");
-        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv"));
+        # Setup -
+        path_to_test_file = joinpath(_PATH_TO_DATA, "test_part_1.txt"); # small public Part 1 manifest
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
 
-        # load the test file -
-        d = formulaparse(path_to_test_file);
+        # Parse the test manifest -
+        d = formulaparse(path_to_test_file); # manifest line number => formula model
 
-        # decode the records -
-        (total, weights) = decode_part_1(d, masses);
+        # Decode the records -
+        (total, weights) = decode_part_1(d, masses); # checksum (amu), plus line number => molecular weight (amu)
 
-        # water on line 1 weighs 18.015 amu, and the checksum for test_part_1.txt is 259.211 -
+        # Check selected line weights and the complete manifest checksum (amu) -
         @test isapprox(weights[1], 18.015; atol = 1e-3)
         @test isapprox(weights[2], 180.156; atol = 1e-3)
         @test isapprox(total, 259.211; atol = 1e-3)
@@ -64,22 +64,22 @@ include("Include.jl")
 
     @testset "decode_part_1 with production_part_1.txt" begin
 
-        # setup -
-        path_to_production_file = joinpath(_PATH_TO_DATA, "production_part_1.txt");
-        number_of_production_records = 150;
-        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv"));
+        # Setup -
+        path_to_production_file = joinpath(_PATH_TO_DATA, "production_part_1.txt"); # full Part 1 manifest
+        number_of_production_records = 150; # expected number of physical file lines
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
 
-        # load the production file -
-        d = formulaparse(path_to_production_file);
+        # Parse the production manifest -
+        d = formulaparse(path_to_production_file); # manifest line number => formula model
 
-        # this should be a dictionary of 150 records, with type MyChemicalFormulaModel
+        # Check the collection shape and model type -
         @test length(d) == number_of_production_records;
         @test typeof(d) == Dict{Int64, MyChemicalFormulaModel}
 
-        # decode the records -
-        (total, weights) = decode_part_1(d, masses);
+        # Decode the records -
+        (total, weights) = decode_part_1(d, masses); # checksum (amu), plus line number => molecular weight (amu)
 
-        # the checksum for production_part_1.txt should be 113188.572 -
+        # Check the complete production checksum (amu) -
         @test isapprox(total, 113188.572; atol = 1e-3)
     end
 end

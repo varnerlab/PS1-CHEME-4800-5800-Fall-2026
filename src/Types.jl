@@ -9,11 +9,11 @@ formula read from a manifest file.
 """
 mutable struct MyChemicalFormulaModel
 
-    # data fields -
+    # Data fields -
     # TODO: Fill in the fields (don't forget to include the type of each field).
     # The model should hold the formula String, the characters of the formula as
     # an Array{Char,1}, and the number of characters as an Int64.
 
-    # constructor
-    MyChemicalFormulaModel() = new();
+    # Default constructor -
+    MyChemicalFormulaModel() = new(); # `build(...)` populates the fields after allocation
 end

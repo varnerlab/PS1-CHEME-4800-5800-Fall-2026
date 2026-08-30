@@ -15,20 +15,20 @@ from index 1), while the value is the `MyChemicalFormulaModel` object holding th
 """
 function formulaparse(filepath::String)::Dict{Int64, MyChemicalFormulaModel}
 
-    # initialize -
-    records = Dict{Int64, MyChemicalFormulaModel}()
-    linecounter = 1;
+    # Initialize -
+    records = Dict{Int64, MyChemicalFormulaModel}() # manifest line number => parsed formula model
+    linecounter = 1; # physical file lines and Julia positions both start at 1
 
-    # main -
+    # Read the formula manifest -
     open(filepath, "r") do io
         for line ∈ eachline(io)
 
-            # TODO: build a model from this line of text, store it in records, and update linecounter
+            # TODO: Build a model from this line, store it under `linecounter`, and advance the counter.
             throw("formulaparse method not implemented yet");
         end
     end
 
-    # return the records -
+    # Return the parsed records -
     return records;
 end
 
@@ -47,19 +47,20 @@ The key of the dictionary is the element symbol, while the value is the atomic m
 """
 function massparse(filepath::String)::Dict{String, Float64}
 
-    # initialize -
-    masses = Dict{String, Float64}()
+    # Initialize -
+    masses = Dict{String, Float64}() # element symbol => atomic mass (amu)
 
-    # main -
+    # Read the atomic-mass table -
     open(filepath, "r") do io
         for (i, line) ∈ enumerate(eachline(io))
 
-            # TODO: skip the header line, split the others on the comma, and store symbol => mass
+            # `i` is the one-based physical line number; line 1 is the CSV header.
+            # TODO: Skip the header, split each data row at the comma, and store symbol => mass.
             throw("massparse method not implemented yet");
         end
     end
 
-    # return the mass table -
+    # Return the atomic-mass lookup table -
     return masses;
 end
 # ===== PUBLIC METHODS ABOVE HERE ==================================================================================== #
