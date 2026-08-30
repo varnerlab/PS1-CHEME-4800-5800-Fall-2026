@@ -1,12 +1,19 @@
 # PS1: Decode the Molecular-Weight Checksum of a Shipping Manifest
-Problem set 1 `(PS1)` gives students practice working with [Strings](https://docs.julialang.org/en/v1/manual/strings/#man-strings), [Characters](https://docs.julialang.org/en/v1/manual/strings/#man-characters), [Arrays](https://docs.julialang.org/en/v1/manual/arrays/#man-arrays-1), [Dictionaries](https://docs.julialang.org/en/v1/base/collections/#Base.Dict), [Loops](https://docs.julialang.org/en/v1/manual/control-flow/#man-loops-1), and the documented, tested function interfaces from Week 2. `PS1` is divided into two parts.
+Problem set 1 `(PS1)` gives students practice working with [Strings](https://docs.julialang.org/en/v1/manual/strings/#man-strings), [Characters](https://docs.julialang.org/en/v1/manual/strings/#man-characters), [Arrays](https://docs.julialang.org/en/v1/manual/arrays/#man-arrays-1), [Dictionaries](https://docs.julialang.org/en/v1/base/collections/#Base.Dict), [Loops](https://docs.julialang.org/en/v1/manual/control-flow/#man-loops-1), and the documented, tested function interfaces from Week 2. 
 
-__Dates:__ PS1 is released on Saturday, September 5 and is due (as a zip archive uploaded to Canvas) by 11:59 PM ET on Saturday, September 19. The reference solution will be published in this repository after the due date.
+Logistics:
+
+* __Dates:__ PS1 will be released on Saturday, September 5 and is due (as a zip archive uploaded to Canvas) by 11:59 PM ET on Saturday, September 19. The reference solution will be published in this repository after the due date. You must submit __something__ by the deadline to be opted into the infinite-revision policy. If you do not submit anything by the deadline, you will receive a score of `0` for this assignment, and will be locked out of the infinite-revision policy.
+* __Infinite-revision policy:__ After the due date, you may revise and resubmit your work as many times as you like until the end of the semester. Each resubmission will be graded, and the highest score will be recorded. The reference solution will be published in this repository after the due date. Use the reference solution to check your work and to help you understand any mistakes you made. You may also use the reference solution to help you debug your code, __but you may not copy it__.
+* __Group and AI Policy:__ Students are expected to submit independent work on this assignment. However, you may discuss the problem set with classmates, but you may not share code or solutions. You are allowed to use any resources you like, including the Julia documentation, AI tools, and the internet. 
+
 
 ## The story
 A chemical supplier ships you a manifest: a plain-text file with one molecular formula per line. Before the shipment is accepted, the receiving system must recompute the manifest `checksum`: the sum of the molecular weights of every compound listed in the file, in atomic mass units `amu`. Your job is to write the program that parses the manifest and recovers the checksum.
 
 You are given an atomic-mass table in the file `atomic-masses.csv` in the `data` directory. The first line is a header; every following line has the form `symbol,mass`, e.g., `C,12.011`. The molecular weight of a formula is the sum over its elements of the atomic mass of the element multiplied by its count, e.g., the molecular weight of water `H2O` is `2*(1.008) + 15.999 = 18.015 amu`.
+
+`PS1` is divided into two parts.
 
 ## Part 1
 In Part 1, the manifest uses a simplified formula grammar: every element symbol is a `single uppercase letter`, optionally followed by a count written as one or more digits. A missing count means `1`. There are no parentheses, hydrates, or charges.
@@ -23,11 +30,11 @@ The molecular weights of these four lines are `18.015`, `180.156`, `44.009`, and
 
 ### Tasks Part 1
 The public `application programming interface (API)` for this problem set consists of the following types and functions:
-1. Create the `MyChemicalFormulaModel` type in the `Types.jl` file. `MyChemicalFormulaModel` should be `mutable` and have three fields:
+1. Create the `MyChemicalFormulaModel` type in the `Types.jl` file. The `MyChemicalFormulaModel` type should be `mutable` and have three fields:
     * The `formula::String` field holds a single formula line of text,
     * The `characters::Array{Char, 1}` field holds the characters of the formula,
     * The `len::Int64` field holds the length (number of characters) of the formula.
-2. Create a `build` method in the `Factory.jl` file that takes the `MyChemicalFormulaModel` type and a [NamedTuple](https://docs.julialang.org/en/v1/base/base/#Core.NamedTuple) holding the formula in its `formula` field, and returns a `MyChemicalFormulaModel` object (with all the fields populated).
+2. Create a `build` method in the `Factory.jl` file that takes the `MyChemicalFormulaModel` type and a [NamedTuple](https://docs.julialang.org/en/v1/base/base/#Core.NamedTuple) holding the formula in its `formula` field, and returns a `MyChemicalFormulaModel` instance (with all the fields populated).
 3. Complete the implementation of the two functions in the `Files.jl` file:
    - The `formulaparse` function takes a manifest file path as input and returns a [Dictionary](https://docs.julialang.org/en/v1/base/collections/#Base.Dict) whose `key` is the line number (starting from index 1) and whose `value` is a `MyChemicalFormulaModel` instance holding that line's formula.
    - The `massparse` function takes the atomic-mass file path as input and returns a `Dict{String, Float64}` mapping each element symbol to its atomic mass.
