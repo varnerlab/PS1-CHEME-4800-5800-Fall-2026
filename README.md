@@ -1,11 +1,11 @@
 # PS1: Decode the Molecular-Weight Checksum of a Shipping Manifest
-Problem set 1 `(PS1)` gives students practice working with [Strings](https://docs.julialang.org/en/v1/manual/strings/#man-strings), [Characters](https://docs.julialang.org/en/v1/manual/strings/#man-characters), [Arrays](https://docs.julialang.org/en/v1/manual/arrays/#man-arrays-1), [Dictionaries](https://docs.julialang.org/en/v1/base/collections/#Base.Dict), [Loops](https://docs.julialang.org/en/v1/manual/control-flow/#man-loops-1), and the documented, tested function interfaces from Week 2. 
+Problem set 1 `(PS1)` gives students practice working with [Strings](https://docs.julialang.org/en/v1/manual/strings/#man-strings), [Characters](https://docs.julialang.org/en/v1/manual/strings/#man-characters), [Arrays](https://docs.julialang.org/en/v1/manual/arrays/#man-arrays-1), [Dictionaries](https://docs.julialang.org/en/v1/base/collections/#Base.Dict), [Loops](https://docs.julialang.org/en/v1/manual/control-flow/#man-loops-1), and the function interfaces from Week 2.
 
 Logistics:
 
-* __Dates:__ PS1 will be released on Saturday, September 5 and is due (as a zip archive uploaded to Canvas) by 11:59 PM ET on Saturday, September 19. The reference solution will be published in this repository after the due date. You must submit __something__ by the deadline to be opted into the infinite-revision policy. If you do not submit anything by the deadline, you will receive a score of `0` for this assignment, and will be locked out of the infinite-revision policy.
-* __Infinite-revision policy:__ After the due date, you may revise and resubmit your work as many times as you like until the end of the semester. Each resubmission will be graded, and the highest score will be recorded. The reference solution will be published in this repository after the due date. Use the reference solution to check your work and to help you understand any mistakes you made. You may also use the reference solution to help you debug your code, __but you may not copy it__.
-* __Group and AI Policy:__ Students are expected to submit independent work on this assignment. However, you may discuss the problem set with classmates, but you may not share code or solutions. You are allowed to use any resources you like, including the Julia documentation, AI tools, and the internet. 
+* __Dates:__ Problem set 1 (PS1) will be released on Saturday, September 5 and is due (as a zip archive uploaded to Canvas) by 11:59 PM ET on Saturday, September 19. The reference solution will be published in this repository after the due date. You must submit __something__ by the deadline to be opted into the infinite-revision policy. If you do not submit anything by the deadline, you will receive a score of `0` for this assignment, and will be locked out of the infinite-revision policy.
+* __Infinite-revision policy:__ After the due date, you may revise and resubmit your work as many times as you like until the end of the semester. Each resubmission will be graded, and the highest score will be recorded. The reference solution will be published in this repository after the due date. Use the reference solution to check your work and to help you understand any mistakes you made. You may also use the reference solution to help you debug your code, __but you may not copy it__. We check for plagiarism, and copying the reference solution will result in a score of `0` for this assignment.
+* __Group and AI Policy:__ Students are expected to submit independent work on this assignment. However, you may discuss the problem set with classmates, but you may not directly share code or solutions. You are allowed to use any resources you like, including the Julia documentation, AI tools, and the internet.
 
 
 ## The story
@@ -43,12 +43,14 @@ The public `application programming interface (API)` for this problem set consis
    - The `second` element should be a dictionary of type `Dict{Int64, Float64}` whose `key` is the line number (starting from index 1) and whose `value` is the molecular weight of that line's formula.
    - A formula containing a character the grammar does not recognize, or an element symbol missing from the mass table, should throw a descriptive [ArgumentError](https://docs.julialang.org/en/v1/base/base/#Core.ArgumentError). This is the defensive-interface contract from the Week 2 labs.
 
+The Part 1 decoder must reject malformed formulas rather than skipping or repairing them. For example, `2H` is invalid because a count cannot appear before an element, `H-2` is invalid because a hyphen is not part of the grammar, and `X2` is invalid because `X` is not present in the supplied atomic-mass table. Each of these cases must throw an `ArgumentError`.
+
 To test your implementation, execute the `testme_part_1.jl` script in the [Julia REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) by using [the `include(...)` function](https://docs.julialang.org/en/v1/base/base/#Base.include). This checks the functions developed above and the final checksum on the `production_part_1.txt` manifest (`150` formulas). The Part 1 production checksum should be `113188.572 amu` (compared with a tolerance of `0.001`).
 
 ## Part 2
-As it turns out, the supplier's real manifests use the full periodic table, and your Part 1 decoder is not just incomplete on them, it is `wrong`. Element symbols can have `one uppercase letter followed by zero or more lowercase letters`: sodium chloride is `NaCl`, and tin(IV) oxide is `SnO2`.
+As it turns out, the supplier's real manifests use the full periodic table, and your Part 1 decoder may be `wrong`. Element symbols can have `one uppercase letter followed by zero or more lowercase letters`: sodium chloride is `NaCl`, and tin(IV) oxide is `SnO2`.
 
-* `Interesting wrinkle`: Case is the only thing separating some molecules. `CO` is carbon monoxide, one carbon and one oxygen, weighing `28.010 amu`. `Co` is elemental cobalt, weighing `58.933 amu`. Your decoder has to read the characters carefully: an uppercase letter starts a symbol, and any lowercase letters that follow belong to that same symbol. This is the Week 2 lesson about characters and code points doing real work: `O` and `o` are different code points, and here they are worth `30.923 amu`.
+* `Interesting wrinkle`: Case is the only thing separating some molecules. The symbol `CO` is carbon monoxide, one carbon and one oxygen, weighing `28.010 amu`. On the other hand, the symbol `Co` is elemental cobalt, weighing `58.933 amu`. Your decoder has to read the characters carefully: an uppercase letter starts a symbol, and any lowercase letters that follow belong to that same symbol. This is the Week 2 lesson about characters and code points: `O` and `o` are different code points, and here they are worth `30.923 amu`.
 
 For example, consider the following `6-line` manifest, provided in the `test_part_2.txt` file in the `data` directory:
 ```
@@ -66,13 +68,15 @@ We can use all of the types and functions from [Part 1](#part-1) to solve this p
 
 1. Complete the implementation of the `decode_part_2` function in the `Compute.jl` file. The `decode_part_2` function has the same signature, return contract, and error contract as `decode_part_1`, but reads element symbols under the full grammar: one uppercase letter followed by zero or more lowercase letters, then an optional count.
 
+The Part 2 grammar still excludes leading counts, parentheses, hydrates, and charges. For example, `2H` and `H(2)` must throw an `ArgumentError`. A syntactically valid symbol that is absent from the mass table must also throw an `ArgumentError`; the public tests use `Xx2` to check this requirement.
+
 To test your [Part 2](#part-2) implementation, execute the `testme_part_2.jl` script in the [Julia REPL](https://docs.julialang.org/en/v1/stdlib/REPL/) by using [the `include(...)` function](https://docs.julialang.org/en/v1/base/base/#Base.include). This script also confirms that `decode_part_1` throws an `ArgumentError` when handed a Part 2 manifest, because refusing bad input loudly beats returning a wrong number quietly. The Part 2 production checksum on the `production_part_2.txt` manifest (`150` formulas) should be `190707.141 amu` (compared with a tolerance of `0.001`).
 
-## Submitting your work
-When you are done (or as far as you got; partial solutions earn partial credit), run the `submit.jl` script from the repository root:
+## Checking and submitting your work
+When you are done (or as far as you got; partial solutions earn partial credit), run the `check_submission.jl` script from the repository root:
 
 ```
-julia --startup-file=no submit.jl
+julia --startup-file=no check_submission.jl
 ```
 
-The script runs both test suites, reports what passes, and writes a `MANIFEST.txt` file recording a digest of your source files. Then zip the whole problem-set folder, rename the archive to `PS1-<your netid>.zip`, and upload it to the PS1 assignment on Canvas before the deadline. The zip should contain everything: your `src` files, the `data` folder, and the generated `MANIFEST.txt`.
+**This script does not connect to Canvas or upload your work.** It runs both test suites, reports what passes, and writes a `MANIFEST.txt` file recording a digest of your source files. After the script finishes, zip the whole problem-set folder, rename the archive to `PS1-<your netid>.zip`, and upload it manually to the PS1 assignment on Canvas before the deadline. The zip should contain everything: your `src` files, the `data` folder, and the generated `MANIFEST.txt`.

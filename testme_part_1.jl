@@ -62,6 +62,24 @@ include("Include.jl") # load the assignment code, data path, and Test standard l
         @test isapprox(total, 259.211; atol = 1e-3)
     end
 
+    @testset "decode_part_1 rejects invalid formulas" begin
+
+        # Setup -
+        masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
+        invalid_formulas = [
+            "2H",  # a count cannot appear before an element symbol
+            "H-2", # a hyphen is not part of the Part 1 grammar
+            "X2",  # X is absent from the supplied atomic-mass table
+        ];
+
+        # Check each defensive-interface case independently -
+        for formula ∈ invalid_formulas
+            model = build(MyChemicalFormulaModel, (formula = formula,)); # isolate one invalid formula
+            d = Dict{Int64, MyChemicalFormulaModel}(1 => model); # one-line manifest for the error check
+            @test_throws ArgumentError decode_part_1(d, masses)
+        end
+    end
+
     @testset "decode_part_1 with production_part_1.txt" begin
 
         # Setup -

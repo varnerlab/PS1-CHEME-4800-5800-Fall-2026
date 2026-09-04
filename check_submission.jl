@@ -1,13 +1,22 @@
-# Check-and-package helper. Run from the repository root:
+# Local check-and-package helper. Run from the repository root:
 #
-#   julia --startup-file=no submit.jl
+#   julia --startup-file=no check_submission.jl
 #
 # The script runs both test suites (a partial solution is fine; failures are
 # reported, not fatal), then writes MANIFEST.txt with a SHA-256 digest of every
-# file in src/. Finish by zipping the folder as the printed instructions describe.
+# file in src/. It does not connect to Canvas or upload the submission. Finish by
+# zipping the folder and uploading it manually as the printed instructions describe.
 
 import Dates # timestamp written to the submission manifest
 using SHA    # SHA-256 digests used to identify the submitted source files
+
+# Explain the boundary between this local check and the Canvas submission -
+println("""
+==================== important ====================
+This script checks your work and prepares MANIFEST.txt.
+It does NOT upload anything to Canvas.
+You must still create a zip archive and upload it through Canvas yourself.
+""");
 
 # Run both public test suites and retain their completion status -
 results = Dict{String, Bool}(); # test filename => whether the suite completed without an uncaught exception
@@ -47,6 +56,8 @@ for part ∈ sort(collect(keys(results)))
 end
 println("wrote ", manifest_path);
 println("""
+This script has NOT uploaded anything to Canvas.
+
 Next steps:
 1. Zip the whole problem-set folder (the folder holding this script):
    - macOS: right-click the folder in Finder and choose "Compress".
