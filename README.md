@@ -79,4 +79,6 @@ When you are done (or as far as you got; partial solutions earn partial credit),
 julia --startup-file=no check_submission.jl
 ```
 
-**This script does not connect to Canvas or upload your work.** It runs both test suites, reports what passes, and writes a `MANIFEST.txt` file recording a digest of your source files. After the script finishes, zip the whole problem-set folder, rename the archive to `PS1-<your netid>.zip`, and upload it manually to the PS1 assignment on Canvas before the deadline. The zip should contain everything: your `src` files, the `data` folder, and the generated `MANIFEST.txt`.
+**This script does not connect to Canvas or upload your work.** It runs both test suites, reports what passes, and writes a `MANIFEST.txt` file recording a digest of your source files. If a test fails, review the failure, fix as much as you can, and run the script again. If the deadline is imminent, submit your current work even if a test is still failing: submitting something is required for partial credit and for the infinite-revision policy.
+
+When your work is ready—or before the deadline if you cannot resolve every failure—zip the whole problem-set folder, rename the archive to `CHEME-4800-5800-PS1-<your netid>.zip` (for example, `CHEME-4800-5800-PS1-abc123.zip`), and upload it manually to the PS1 assignment on Canvas. The zip should contain everything: your `src` files, the `data` folder, and the generated `MANIFEST.txt`.
