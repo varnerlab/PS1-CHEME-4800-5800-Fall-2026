@@ -26,7 +26,8 @@ written as one or more digits (a missing count means 1).
 """
 function decode_part_1(models::Dict{Int64, MyChemicalFormulaModel},
     masses::Dict{String, Float64})::Tuple{Float64, Dict{Int64, Float64}}
-    throw("decode_part_1 method not implemented yet");
+    # TODO: Replace this starter error with the Part 1 scanner and checksum calculation.
+    throw("decode_part_1 method not implemented yet"); # prevents an unfinished decoder from returning a plausible value
 end
 
 """
@@ -52,6 +53,7 @@ letters, optionally followed by a count written as one or more digits (a missing
 """
 function decode_part_2(models::Dict{Int64, MyChemicalFormulaModel},
     masses::Dict{String, Float64})::Tuple{Float64, Dict{Int64, Float64}}
-    throw("decode_part_2 method not implemented yet");
+    # TODO: Replace this starter error with the multi-letter-symbol scanner and checksum calculation.
+    throw("decode_part_2 method not implemented yet"); # prevents an unfinished decoder from returning a plausible value
 end
 # ===== PUBLIC METHODS ABOVE HERE ==================================================================================== #

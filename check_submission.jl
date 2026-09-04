@@ -26,7 +26,7 @@ for part ∈ ["testme_part_1.jl", "testme_part_2.jl"]
     try
         include(joinpath(@__DIR__, part)); # `@__DIR__` keeps execution independent of `pwd()`
     catch error
-        ok = false; # the failure details were already printed by the test framework
+        ok = false; # a failed assertion or early load error prevented clean suite completion
     end
     results[part] = ok; # preserve one status for each public test suite
 end
@@ -39,7 +39,7 @@ open(manifest_path, "w") do io
 
     # Record the test outcomes -
     for part ∈ sort(collect(keys(results)))
-        println(io, part, ": ", results[part] ? "all tests passed" : "some tests failed");
+        println(io, part, ": ", results[part] ? "all tests passed" : "some tests failed"); # sort for reproducible output order
     end
 
     # Fingerprint every submitted Julia source file -

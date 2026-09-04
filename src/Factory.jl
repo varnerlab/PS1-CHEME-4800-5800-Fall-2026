@@ -18,6 +18,7 @@ The `build` function constructs and configures a `MyChemicalFormulaModel` instan
 - A `MyChemicalFormulaModel` instance with all of its fields populated from the formula.
 """
 function build(modeltype::Type{MyChemicalFormulaModel}, data::NamedTuple)::MyChemicalFormulaModel
-    throw("build method not implemented for model type: $(modeltype)");
+    # TODO: Replace this starter error with logic that populates every model field.
+    throw("build method not implemented for model type: $(modeltype)"); # prevents an incomplete model from escaping silently
 end
 # ===== PUBLIC METHODS ABOVE HERE ==================================================================================== #
