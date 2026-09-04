@@ -10,7 +10,7 @@ experimental observations.
   molecular weights appear in the top-level README.
 - `production_part_1.txt` and `production_part_2.txt` each hold 150 formulas: a few
   recognizable molecules plus deterministic random compositions (seed 2026). Part 1
-  uses single-letter element symbols only; Part 2 draws on the full table.
+  uses single-letter element symbols only; Part 2 draws on all 33 entries in the supplied table.
 
 SHA-256 digests of the authored files:
 

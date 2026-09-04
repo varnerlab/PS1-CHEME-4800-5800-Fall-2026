@@ -8,8 +8,8 @@
         masses::Dict{String, Float64}) -> Tuple{Float64, Dict{Int64, Float64}}
 
 The `decode_part_1` function computes the molecular weight of every formula in the `models` dictionary
-using the Part 1 grammar: every element is a single uppercase letter, optionally followed by a count
-written as one or more digits (a missing count means 1).
+using the Part 1 grammar: every element is a single uppercase letter, optionally followed by a positive
+integer count written as one or more digits (a missing count means 1). A formula must not be empty.
 
 ### Arguments
 - `models::Dict{Int64, MyChemicalFormulaModel}`: The parsed manifest. The key is the line number, the value is the formula model.
@@ -21,8 +21,8 @@ written as one or more digits (a missing count means 1).
   where the key is the line number and the value is the molecular weight of that line's formula.
 
 ### Errors
-- An `ArgumentError` is thrown when a formula contains a character that the Part 1 grammar does not
-  recognize, or an element symbol that is not in the mass table.
+- An `ArgumentError` is thrown when a formula is empty, contains a nonpositive count, contains a character
+  that the Part 1 grammar does not recognize, or uses an element symbol that is not in the mass table.
 """
 function decode_part_1(models::Dict{Int64, MyChemicalFormulaModel},
     masses::Dict{String, Float64})::Tuple{Float64, Dict{Int64, Float64}}
@@ -36,7 +36,8 @@ end
 
 The `decode_part_2` function computes the molecular weight of every formula in the `models` dictionary
 using the Part 2 grammar: an element symbol is one uppercase letter followed by zero or more lowercase
-letters, optionally followed by a count written as one or more digits (a missing count means 1).
+letters, optionally followed by a positive integer count written as one or more digits (a missing count
+means 1). A formula must not be empty.
 
 ### Arguments
 - `models::Dict{Int64, MyChemicalFormulaModel}`: The parsed manifest. The key is the line number, the value is the formula model.
@@ -48,8 +49,8 @@ letters, optionally followed by a count written as one or more digits (a missing
   where the key is the line number and the value is the molecular weight of that line's formula.
 
 ### Errors
-- An `ArgumentError` is thrown when a formula contains a character that the Part 2 grammar does not
-  recognize, or an element symbol that is not in the mass table.
+- An `ArgumentError` is thrown when a formula is empty, contains a nonpositive count, contains a character
+  that the Part 2 grammar does not recognize, or uses an element symbol that is not in the mass table.
 """
 function decode_part_2(models::Dict{Int64, MyChemicalFormulaModel},
     masses::Dict{String, Float64})::Tuple{Float64, Dict{Int64, Float64}}

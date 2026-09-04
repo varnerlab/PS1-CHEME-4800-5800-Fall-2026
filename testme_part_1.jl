@@ -67,6 +67,8 @@ include("Include.jl") # load the assignment code, data path, and Test standard l
         # Setup -
         masses = massparse(joinpath(_PATH_TO_DATA, "atomic-masses.csv")); # element symbol => atomic mass (amu)
         invalid_formulas = [
+            "",    # every formula must contain at least one element
+            "H0",  # an explicit element count must be positive
             "2H",  # a count cannot appear before an element symbol
             "H-2", # a hyphen is not part of the Part 1 grammar
             "X2",  # X is absent from the supplied atomic-mass table
